@@ -1,0 +1,19 @@
+# RZXCore Language File — English (US)
+# Supports MiniMessage: https://docs.advntr.dev/minimessage/format.html
+# Legacy &-color-codes are supported as a fallback.
+
+prefix: "<gray>[<gradient:#FF6B6B:#4ECDC4>RZXCore</gradient>]</gray> "
+
+# General messages
+no-permission: "%prefix%<red>You do not have permission to use this command.</red>"
+unknown-command: "%prefix%<red>Unknown command. Use <yellow>/%command% help</yellow> for a list of commands.</red>"
+player-only: "%prefix%<red>This command can only be used by players.</red>"
+reload-success: "%prefix%<green>Configuration reloaded successfully.</green>"
+reload-fail: "%prefix%<red>Failed to reload configuration. Check console for details.</red>"
+
+# Cooldown
+on-cooldown: "%prefix%<red>You must wait <yellow>%time%</yellow> seconds before using this again.</red>"
+
+# Player data
+player-data-loaded: "%prefix%<green>Your data has been loaded.</green>"
+player-data-saved: "%prefix%<green>Your data has been saved.</green>"

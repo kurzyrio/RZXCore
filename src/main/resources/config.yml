@@ -1,0 +1,23 @@
+# RZXCore Configuration
+# Do not edit config-version manually — it is used for automatic config migration.
+config-version: 1
+
+# Default locale for messages. Must match a file in lang/ (without .yml).
+locale: en_US
+
+# Storage configuration for the shared player data service.
+storage:
+  # Database backend: 'sqlite' or 'mysql'
+  type: sqlite
+
+  # MySQL settings (only used when type is 'mysql')
+  mysql:
+    host: localhost
+    port: 3306
+    database: rzxcore
+    username: root
+    password: ""
+
+  # Connection pool settings
+  pool:
+    maximum-pool-size: 10

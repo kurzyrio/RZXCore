@@ -1,0 +1,9 @@
+name: RZXCore
+version: '${project.version}'
+main: com.rzx.core.RZXCore
+api-version: '1.21'
+author: RZX
+description: Shared core library plugin for the RZX plugin network
+softdepend:
+  - Vault
+  - PlaceholderAPI
