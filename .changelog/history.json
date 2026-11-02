@@ -1,5 +1,18 @@
 [
   {
+    "version": "v1.0.2",
+    "timestamp": "2026-11-03 06:56",
+    "author": "AI Assistant",
+    "why": "Upgraded Maven shade plugin ASM dependencies to 9.10.1 to support Java 25 bytecode (class file major version 69).",
+    "files": [
+      {
+        "status": "modified",
+        "path": "pom.xml",
+        "details": "Upgraded shade plugin ASM and ASM-commons to 9.10.1 for Java 25 class version 69 support"
+      }
+    ]
+  },
+  {
     "version": "v1.0.1",
     "timestamp": "2026-11-03 06:49",
     "author": "AI Assistant",
