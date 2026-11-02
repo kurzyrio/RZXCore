@@ -1,5 +1,18 @@
 [
   {
+    "version": "v1.0.3",
+    "timestamp": "2026-11-03 07:05",
+    "author": "AI Assistant",
+    "why": "Created Modrinth release changelog document without emojis.",
+    "files": [
+      {
+        "status": "created",
+        "path": "CHANGELOG_MODRINTH.md",
+        "details": "Added clean Modrinth version release changelog"
+      }
+    ]
+  },
+  {
     "version": "v1.0.2",
     "timestamp": "2026-11-03 06:56",
     "author": "AI Assistant",
