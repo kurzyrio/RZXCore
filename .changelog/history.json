@@ -1,5 +1,28 @@
 [
   {
+    "version": "v1.0.4",
+    "timestamp": "2026-11-03 07:21",
+    "author": "AI Assistant",
+    "why": "Cleaned repository of unnecessary scratch and temporary files, consolidated documentation into README.md, and purged build residue.",
+    "files": [
+      {
+        "status": "deleted",
+        "path": "RZXCORE_INTEGRATION_PROMPT.md",
+        "details": "Removed scratch prompt file"
+      },
+      {
+        "status": "modified",
+        "path": "README.md",
+        "details": "Expanded documentation with full feature overview and developer integration guide"
+      },
+      {
+        "status": "modified",
+        "path": ".gitignore",
+        "details": "Removed scratch file pattern"
+      }
+    ]
+  },
+  {
     "version": "v1.0.3",
     "timestamp": "2026-11-03 07:05",
     "author": "AI Assistant",
