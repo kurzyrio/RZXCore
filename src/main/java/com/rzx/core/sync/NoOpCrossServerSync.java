@@ -19,7 +19,7 @@ public class NoOpCrossServerSync implements CrossServerSync {
 
     private void warnOnce() {
         if (!warned) {
-            logger.warning("CrossServerSync is not configured â€” sync calls are being silently dropped. "
+            logger.warning("CrossServerSync is not configured — sync calls are being silently dropped. "
                     + "Configure a sync backend (e.g. Redis) if you need cross-server communication.");
             warned = true;
         }

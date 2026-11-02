@@ -5,7 +5,7 @@ import java.util.function.Consumer;
 /**
  * Interface for cross-server synchronization (e.g. via Redis pub/sub or plugin messaging channels).
  * <p>
- * This is currently a stub â€” no real implementation exists yet. The {@link NoOpCrossServerSync}
+ * This is currently a stub — no real implementation exists yet. The {@link NoOpCrossServerSync}
  * default is used at runtime. When a Redis or plugin-messaging implementation is added later,
  * it will implement this interface without changing any consumer-facing API.
  */

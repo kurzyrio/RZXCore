@@ -27,6 +27,10 @@ public class ItemBuilder {
         this.itemStack = new ItemStack(material, amount);
     }
 
+    public ItemBuilder(ItemStack itemStack) {
+        this.itemStack = itemStack != null ? itemStack.clone() : new ItemStack(Material.AIR);
+    }
+
     public ItemBuilder name(Component displayName) {
         itemStack.editMeta(meta -> meta.displayName(displayName));
         return this;
@@ -81,9 +85,9 @@ public class ItemBuilder {
         return this;
     }
 
-    /** Builds and returns the constructed ItemStack. */
+    /** Builds and returns a clone of the constructed ItemStack. */
     public ItemStack build() {
-        return itemStack;
+        return itemStack.clone();
     }
 }
 

@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -110,14 +111,11 @@ public class CommandFramework {
                                 plugin.getLogger().log(Level.SEVERE, "Error executing subcommand " + subName, e);
                                 return true;
                             }
-                        } else {
-                            sender.sendMessage(messageManager.getMessage("unknown-command", "command", commandLabel));
-                            return true;
                         }
                     }
                 }
 
-                // No subcommand matched or no subcommands registered â€” invoke main handler
+                // No subcommand matched or no subcommands registered — invoke main handler
                 try {
                     method.setAccessible(true);
                     method.invoke(handler, sender, args);
@@ -141,6 +139,25 @@ public class CommandFramework {
                         plugin.getLogger().log(Level.SEVERE, "Error executing tab completer for " + name, e);
                     }
                 }
+
+                // Auto tab-completion for registered subcommands if no custom tab-completer
+                Map<String, Method> subs = subCommands.get(name.toLowerCase());
+                if (subs != null && args.length == 1) {
+                    String prefix = args[0].toLowerCase();
+                    List<String> completions = new ArrayList<>();
+                    for (Map.Entry<String, Method> entry : subs.entrySet()) {
+                        SubCommand sub = entry.getValue().getAnnotation(SubCommand.class);
+                        if (sub != null) {
+                            if (sub.playerOnly() && !(sender instanceof Player)) continue;
+                            if (!sub.permission().isEmpty() && !sender.hasPermission(sub.permission())) continue;
+                        }
+                        if (entry.getKey().startsWith(prefix)) {
+                            completions.add(entry.getKey());
+                        }
+                    }
+                    return completions;
+                }
+
                 return super.tabComplete(sender, alias, args);
             }
         };

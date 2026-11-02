@@ -102,8 +102,8 @@ public class MessageManager {
         }
 
         // Apply provided placeholders
-        if (placeholders != null && placeholders.length % 2 == 0) {
-            for (int i = 0; i < placeholders.length; i += 2) {
+        if (placeholders != null) {
+            for (int i = 0; i < placeholders.length - 1; i += 2) {
                 String pKey = "%" + placeholders[i] + "%";
                 String pValue = placeholders[i + 1] != null ? placeholders[i + 1] : "";
                 text = text.replace(pKey, pValue);
@@ -120,7 +120,10 @@ public class MessageManager {
 
         // MiniMessage parsing with legacy fallback
         try {
-            return MiniMessage.miniMessage().deserialize(text);
+            if (text.contains("<") && text.contains(">")) {
+                return MiniMessage.miniMessage().deserialize(text);
+            }
+            return LegacyComponentSerializer.legacyAmpersand().deserialize(text);
         } catch (Exception e) {
             return LegacyComponentSerializer.legacyAmpersand().deserialize(text);
         }

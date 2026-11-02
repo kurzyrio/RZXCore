@@ -1,0 +1,100 @@
+[
+  {
+    "version": "v1.0.0",
+    "timestamp": "2026-11-03 06:44",
+    "author": "AI Assistant",
+    "why": "Resolved Java version incompatibilities, fixed inventory item-stealing and drag exploits in GUI system, added transaction atomicity and WAL mode to SQLite database, exposed missing CooldownManager, CrossServerSync, and CommandFramework in CoreAPI, fixed race conditions in player data persistence, and corrected UTF-8 character encoding mojibake.",
+    "files": [
+      {
+        "status": "modified",
+        "path": "pom.xml",
+        "details": "Downgraded compiler release target to Java 21 LTS and stabilized ASM version to 9.7.1"
+      },
+      {
+        "status": "modified",
+        "path": "src/main/java/com/rzx/core/api/CoreAPI.java",
+        "details": "Added getCooldownManager, getCrossServerSync, and createCommandFramework methods"
+      },
+      {
+        "status": "modified",
+        "path": "src/main/java/com/rzx/core/impl/CoreAPIImpl.java",
+        "details": "Fixed Javadoc package name and implemented newly exposed CoreAPI methods"
+      },
+      {
+        "status": "modified",
+        "path": "src/main/java/com/rzx/core/RZXCore.java",
+        "details": "Instantiated and wired CrossServerSync and CooldownManager, ensured clean shutdown cleanup"
+      },
+      {
+        "status": "modified",
+        "path": "src/main/java/com/rzx/core/command/CommandFramework.java",
+        "details": "Fixed non-subcommand fallthrough and added automatic tab-completion for registered subcommands"
+      },
+      {
+        "status": "modified",
+        "path": "src/main/java/com/rzx/core/data/PlayerDataService.java",
+        "details": "Implemented transactional batch upserts with rollback and fixed concurrent dirty tracking race conditions"
+      },
+      {
+        "status": "modified",
+        "path": "src/main/java/com/rzx/core/storage/SQLiteDatabase.java",
+        "details": "Capped pool size to 1 and configured WAL journal mode with busy timeout"
+      },
+      {
+        "status": "modified",
+        "path": "src/main/java/com/rzx/core/gui/Menu.java",
+        "details": "Implemented InventoryHolder to ensure robust menu lifecycle identification"
+      },
+      {
+        "status": "modified",
+        "path": "src/main/java/com/rzx/core/gui/MenuListener.java",
+        "details": "Added InventoryDragEvent handler to prevent item theft and fixed premature unregistration"
+      },
+      {
+        "status": "modified",
+        "path": "src/main/java/com/rzx/core/gui/MenuBuilder.java",
+        "details": "Removed redundant closeInventory call on pagination buttons"
+      },
+      {
+        "status": "modified",
+        "path": "src/main/java/com/rzx/core/hook/PlaceholderAPIHook.java",
+        "details": "Saved plugin reference and implemented getRequiredPlugin"
+      },
+      {
+        "status": "modified",
+        "path": "src/main/java/com/rzx/core/lang/MessageManager.java",
+        "details": "Enhanced placeholder substitution and refined MiniMessage and legacy color code handling"
+      },
+      {
+        "status": "modified",
+        "path": "src/main/java/com/rzx/core/sync/CrossServerSync.java",
+        "details": "Cleaned UTF-8 mojibake"
+      },
+      {
+        "status": "modified",
+        "path": "src/main/java/com/rzx/core/sync/NoOpCrossServerSync.java",
+        "details": "Cleaned UTF-8 mojibake"
+      },
+      {
+        "status": "modified",
+        "path": "src/main/java/com/rzx/core/util/ItemBuilder.java",
+        "details": "Added ItemStack copy constructor and safe cloned item return in build"
+      },
+      {
+        "status": "modified",
+        "path": "README.md",
+        "details": "Updated documentation to Java 21 LTS"
+      },
+      {
+        "status": "modified",
+        "path": "MODRINTH.md",
+        "details": "Updated system requirements to Java 21 LTS"
+      },
+      {
+        "status": "modified",
+        "path": "RZXCORE_INTEGRATION_PROMPT.md",
+        "details": "Updated integration prompt to Java 21 LTS"
+      }
+    ]
+  }
+]

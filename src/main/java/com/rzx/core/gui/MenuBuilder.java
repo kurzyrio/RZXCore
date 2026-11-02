@@ -122,7 +122,7 @@ public class MenuBuilder {
                     currentItems.put(prevSlot, new ItemBuilder(Material.ARROW)
                             .name(Component.text("Previous Page").color(NamedTextColor.YELLOW)).build());
                     final int prevPage = page - 1;
-                    currentHandlers.put(prevSlot, (p, type) -> { p.closeInventory(); open(p, prevPage); });
+                    currentHandlers.put(prevSlot, (p, type) -> open(p, prevPage));
                 }
 
                 // Next page button
@@ -131,7 +131,7 @@ public class MenuBuilder {
                     currentItems.put(nextSlot, new ItemBuilder(Material.ARROW)
                             .name(Component.text("Next Page").color(NamedTextColor.YELLOW)).build());
                     final int nextPage = page + 1;
-                    currentHandlers.put(nextSlot, (p, type) -> { p.closeInventory(); open(p, nextPage); });
+                    currentHandlers.put(nextSlot, (p, type) -> open(p, nextPage));
                 }
             }
         }

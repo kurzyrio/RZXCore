@@ -17,11 +17,13 @@ import java.time.format.DateTimeFormatter;
  */
 public class PlaceholderAPIHook extends PlaceholderExpansion {
 
+    private final Plugin plugin;
     private final PlayerDataService playerDataService;
     private static final DateTimeFormatter FORMATTER =
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").withZone(ZoneId.systemDefault());
 
     public PlaceholderAPIHook(Plugin plugin, PlayerDataService playerDataService) {
+        this.plugin = plugin;
         this.playerDataService = playerDataService;
     }
 
@@ -30,6 +32,7 @@ public class PlaceholderAPIHook extends PlaceholderExpansion {
     @Override public String getVersion() { return "1.0.0"; }
     @Override public boolean persist() { return true; }
     @Override public boolean canRegister() { return true; }
+    @Override public String getRequiredPlugin() { return plugin.getName(); }
 
     @Override
     public String onPlaceholderRequest(Player player, String params) {

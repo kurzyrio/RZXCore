@@ -11,6 +11,6 @@ Shared core library plugin for the RZX plugin network.
 ## Development
 
 Built using:
-- Java 25
+- Java 21+
 - Maven (see [pom.xml](pom.xml))
 - Paper API (1.21.1)

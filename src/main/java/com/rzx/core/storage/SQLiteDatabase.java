@@ -30,9 +30,11 @@ public class SQLiteDatabase implements DatabaseManager {
 
         HikariConfig config = new HikariConfig();
         config.setJdbcUrl("jdbc:sqlite:" + dbFile.getAbsolutePath());
-        config.setMaximumPoolSize(maxPoolSize);
+        // SQLite only supports a single writer; pool size must be 1 to prevent locking
+        config.setMaximumPoolSize(1);
         config.setPoolName("RZXCore-SQLite");
         config.setConnectionTestQuery("SELECT 1");
+        config.setConnectionInitSql("PRAGMA journal_mode=WAL; PRAGMA busy_timeout=5000;");
 
         this.dataSource = new HikariDataSource(config);
     }

@@ -1,10 +1,13 @@
 package com.rzx.core.api;
 
+import com.rzx.core.command.CommandFramework;
 import com.rzx.core.config.ConfigManager;
 import com.rzx.core.data.PlayerDataService;
 import com.rzx.core.hook.HookManager;
 import com.rzx.core.lang.MessageManager;
 import com.rzx.core.storage.DatabaseManager;
+import com.rzx.core.sync.CrossServerSync;
+import com.rzx.core.util.CooldownManager;
 import org.bukkit.plugin.Plugin;
 
 /**
@@ -41,6 +44,15 @@ public interface CoreAPI {
 
     /** Returns the HookManager for checking optional integrations. */
     HookManager getHookManager();
+
+    /** Returns the shared CooldownManager instance. */
+    CooldownManager getCooldownManager();
+
+    /** Returns the CrossServerSync instance. */
+    CrossServerSync getCrossServerSync();
+
+    /** Creates a new CommandFramework for the given plugin. */
+    CommandFramework createCommandFramework(Plugin plugin, MessageManager messageManager);
 
     /** Returns the semantic API version string (e.g. "1.0.0"). */
     String getApiVersion();

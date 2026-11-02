@@ -131,57 +131,71 @@ public class PlayerDataService {
         if (data == null) return;
         if (!dirtyPlayers.contains(uuid)) return;
 
-        try (Connection conn = databaseManager.getConnection()) {
-            // Upsert player_data using UPDATE-then-INSERT for dialect compatibility
-            try (PreparedStatement update = conn.prepareStatement(
-                    "UPDATE player_data SET username = ?, last_seen = ? WHERE uuid = ?")) {
-                update.setString(1, data.getUsername());
-                update.setLong(2, data.getLastSeen());
-                update.setString(3, uuid.toString());
-                int affected = update.executeUpdate();
+        // Remove from dirty set first so concurrent modifications re-mark it as dirty
+        dirtyPlayers.remove(uuid);
 
-                if (affected == 0) {
-                    try (PreparedStatement insert = conn.prepareStatement(
-                            "INSERT INTO player_data (uuid, username, first_join, last_seen) VALUES (?, ?, ?, ?)")) {
-                        insert.setString(1, uuid.toString());
-                        insert.setString(2, data.getUsername());
-                        insert.setLong(3, data.getFirstJoin());
-                        insert.setLong(4, data.getLastSeen());
-                        insert.executeUpdate();
+        try (Connection conn = databaseManager.getConnection()) {
+            boolean autoCommit = conn.getAutoCommit();
+            conn.setAutoCommit(false);
+
+            try {
+                // Upsert player_data using UPDATE-then-INSERT for dialect compatibility
+                try (PreparedStatement update = conn.prepareStatement(
+                        "UPDATE player_data SET username = ?, last_seen = ? WHERE uuid = ?")) {
+                    update.setString(1, data.getUsername());
+                    update.setLong(2, data.getLastSeen());
+                    update.setString(3, uuid.toString());
+                    int affected = update.executeUpdate();
+
+                    if (affected == 0) {
+                        try (PreparedStatement insert = conn.prepareStatement(
+                                "INSERT INTO player_data (uuid, username, first_join, last_seen) VALUES (?, ?, ?, ?)")) {
+                            insert.setString(1, uuid.toString());
+                            insert.setString(2, data.getUsername());
+                            insert.setLong(3, data.getFirstJoin());
+                            insert.setLong(4, data.getLastSeen());
+                            insert.executeUpdate();
+                        }
                     }
                 }
-            }
 
-            // Upsert extra data
-            for (Map.Entry<String, Map<String, String>> nsEntry : data.getAllExtraData().entrySet()) {
-                String namespace = nsEntry.getKey();
-                for (Map.Entry<String, String> dataEntry : nsEntry.getValue().entrySet()) {
-                    String dataKey = dataEntry.getKey();
-                    String dataValue = dataEntry.getValue();
+                // Upsert extra data
+                for (Map.Entry<String, Map<String, String>> nsEntry : data.getAllExtraData().entrySet()) {
+                    String namespace = nsEntry.getKey();
+                    for (Map.Entry<String, String> dataEntry : nsEntry.getValue().entrySet()) {
+                        String dataKey = dataEntry.getKey();
+                        String dataValue = dataEntry.getValue();
 
-                    try (PreparedStatement update = conn.prepareStatement(
-                            "UPDATE player_data_extra SET data_value = ? WHERE uuid = ? AND namespace = ? AND data_key = ?")) {
-                        update.setString(1, dataValue);
-                        update.setString(2, uuid.toString());
-                        update.setString(3, namespace);
-                        update.setString(4, dataKey);
-                        int affected = update.executeUpdate();
+                        try (PreparedStatement update = conn.prepareStatement(
+                                "UPDATE player_data_extra SET data_value = ? WHERE uuid = ? AND namespace = ? AND data_key = ?")) {
+                            update.setString(1, dataValue);
+                            update.setString(2, uuid.toString());
+                            update.setString(3, namespace);
+                            update.setString(4, dataKey);
+                            int affected = update.executeUpdate();
 
-                        if (affected == 0) {
-                            try (PreparedStatement insert = conn.prepareStatement(
-                                    "INSERT INTO player_data_extra (uuid, namespace, data_key, data_value) VALUES (?, ?, ?, ?)")) {
-                                insert.setString(1, uuid.toString());
-                                insert.setString(2, namespace);
-                                insert.setString(3, dataKey);
-                                insert.setString(4, dataValue);
-                                insert.executeUpdate();
+                            if (affected == 0) {
+                                try (PreparedStatement insert = conn.prepareStatement(
+                                        "INSERT INTO player_data_extra (uuid, namespace, data_key, data_value) VALUES (?, ?, ?, ?)")) {
+                                    insert.setString(1, uuid.toString());
+                                    insert.setString(2, namespace);
+                                    insert.setString(3, dataKey);
+                                    insert.setString(4, dataValue);
+                                    insert.executeUpdate();
+                                }
                             }
                         }
                     }
                 }
-            }
 
-            dirtyPlayers.remove(uuid);
+                conn.commit();
+            } catch (SQLException e) {
+                conn.rollback();
+                dirtyPlayers.add(uuid); // Re-flag dirty on failure
+                throw e;
+            } finally {
+                conn.setAutoCommit(autoCommit);
+            }
 
         } catch (SQLException e) {
             plugin.getLogger().severe("Failed to save player data for " + uuid + ": " + e.getMessage());

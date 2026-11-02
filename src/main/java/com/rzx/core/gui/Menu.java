@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Map;
@@ -13,7 +14,7 @@ import java.util.function.BiConsumer;
 /**
  * Immutable menu snapshot: title, size, items, click handlers, pagination state.
  */
-public class Menu {
+public class Menu implements InventoryHolder {
 
     private final String title;
     private final int size;
@@ -21,6 +22,7 @@ public class Menu {
     private final Map<Integer, BiConsumer<Player, ClickType>> clickHandlers;
     private final int currentPage;
     private final int totalPages;
+    private Inventory inventory;
 
     Menu(String title, int size, Map<Integer, ItemStack> items,
          Map<Integer, BiConsumer<Player, ClickType>> clickHandlers, int currentPage, int totalPages) {
@@ -34,7 +36,7 @@ public class Menu {
 
     /** Opens this menu for the given player. */
     public void open(Player player) {
-        Inventory inventory = Bukkit.createInventory(null, size, Component.text(title));
+        this.inventory = Bukkit.createInventory(this, size, Component.text(title));
         for (Map.Entry<Integer, ItemStack> entry : items.entrySet()) {
             if (entry.getKey() < size) {
                 inventory.setItem(entry.getKey(), entry.getValue());
@@ -42,6 +44,11 @@ public class Menu {
         }
         MenuListener.registerMenu(player.getUniqueId(), this);
         player.openInventory(inventory);
+    }
+
+    @Override
+    public Inventory getInventory() {
+        return inventory;
     }
 
     /** Dispatches a click to the registered handler for the given slot. */

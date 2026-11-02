@@ -9,6 +9,8 @@ import com.rzx.core.impl.CoreAPIImpl;
 import com.rzx.core.lang.MessageManager;
 import com.rzx.core.storage.DatabaseManager;
 import com.rzx.core.storage.StorageFactory;
+import com.rzx.core.sync.CrossServerSync;
+import com.rzx.core.sync.NoOpCrossServerSync;
 import com.rzx.core.util.CooldownManager;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.EventHandler;
@@ -20,7 +22,7 @@ import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
- * RZXCore â€” shared core library plugin for the Kurz plugin network.
+ * RZXCore — shared core library plugin for the RZX plugin network.
  * <p>
  * Other plugins should depend on this plugin (via {@code plugin.yml}: {@code depend: [RZXCore]})
  * and access its services through the {@link CoreAPI} interface obtained via:
@@ -36,6 +38,7 @@ public class RZXCore extends JavaPlugin implements Listener {
     private PlayerDataService playerDataService;
     private HookManager hookManager;
     private CooldownManager cooldownManager;
+    private CrossServerSync crossServerSync;
 
     @Override
     public void onEnable() {
@@ -74,16 +77,19 @@ public class RZXCore extends JavaPlugin implements Listener {
         // 5. Cooldown Manager
         cooldownManager = new CooldownManager();
 
-        // 6. Hooks (Vault, PlaceholderAPI)
+        // 6. Cross-Server Sync (default: NoOp)
+        crossServerSync = new NoOpCrossServerSync(getLogger());
+
+        // 7. Hooks (Vault, PlaceholderAPI)
         hookManager = new HookManager(this, playerDataService);
         hookManager.detectHooks();
 
-        // 7. Event Listeners
+        // 8. Event Listeners
         getServer().getPluginManager().registerEvents(this, this);
         getServer().getPluginManager().registerEvents(new MenuListener(), this);
 
-        // 8. Register API via ServicesManager
-        CoreAPI api = new CoreAPIImpl(databaseManager, playerDataService, hookManager);
+        // 9. Register API via ServicesManager
+        CoreAPI api = new CoreAPIImpl(databaseManager, playerDataService, hookManager, cooldownManager, crossServerSync);
         getServer().getServicesManager().register(CoreAPI.class, api, this, ServicePriority.Normal);
 
         getLogger().info("RZXCore v" + getPluginMeta().getVersion() + " enabled successfully!");
@@ -104,7 +110,12 @@ public class RZXCore extends JavaPlugin implements Listener {
             getLogger().info("Database connection closed.");
         }
 
-        // 3. Unregister services
+        // 3. Close cross-server sync
+        if (crossServerSync != null) {
+            crossServerSync.close();
+        }
+
+        // 4. Unregister services
         getServer().getServicesManager().unregisterAll(this);
 
         getLogger().info("RZXCore disabled.");
