@@ -1,5 +1,33 @@
 [
   {
+    "version": "v1.0.1",
+    "timestamp": "2026-11-03 06:49",
+    "author": "AI Assistant",
+    "why": "Restored Java 25 compiler release target across Maven pom.xml and documentation to support the newest Minecraft server versions and runtimes.",
+    "files": [
+      {
+        "status": "modified",
+        "path": "pom.xml",
+        "details": "Restored maven.compiler.release and compiler plugin configuration to Java 25"
+      },
+      {
+        "status": "modified",
+        "path": "README.md",
+        "details": "Updated Java requirement documentation to Java 25"
+      },
+      {
+        "status": "modified",
+        "path": "MODRINTH.md",
+        "details": "Updated JVM platform requirement to Java 25"
+      },
+      {
+        "status": "modified",
+        "path": "RZXCORE_INTEGRATION_PROMPT.md",
+        "details": "Restored Java 25 target specification"
+      }
+    ]
+  },
+  {
     "version": "v1.0.0",
     "timestamp": "2026-11-03 06:44",
     "author": "AI Assistant",

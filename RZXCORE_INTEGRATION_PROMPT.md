@@ -7,7 +7,7 @@ I have created a shared core library plugin called `RZXCore`. I want to refactor
 > Since this is a fresh update from an older version, make sure to delete the old `KurzCore` (or any old `RZXCore`) jar from the server's `plugins/` directory before deploying the new `RZXCore` jar to avoid conflicts, as the packaging, naming conventions, and database tables have changed.
 
 ## RZXCore Specifications
-- **Java target:** Compiled under Java 21 (`--release 21`).
+- **Java target:** Compiled under Java 25 (`--release 25`).
 - **Plugin Name:** `RZXCore`
 - **Maven Coordinates:** `groupId: com.rzx`, `artifactId: core`, `version: 1.0.0-SNAPSHOT`
 - **Base package:** `com.rzx.core`
